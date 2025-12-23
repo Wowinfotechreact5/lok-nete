@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import { useDispatch } from "react-redux";
 
 import UserAvatar from '../images/user-avatar-32.png';
+import { logout } from '../features/auth/authSlice';
 
 function DropdownProfile({
   align
 }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -82,14 +86,19 @@ function DropdownProfile({
               </Link>
             </li>
             <li>
-              <Link
-                className="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
-                to="/signin"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+              <button
+                type="button"
+                className="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3 w-full text-left"
+                onClick={() => {
+                  dispatch(logout());
+                  setDropdownOpen(false);
+                  navigate("/login");
+                }}
               >
                 Sign Out
-              </Link>
+              </button>
             </li>
+
           </ul>
         </div>
       </Transition>
