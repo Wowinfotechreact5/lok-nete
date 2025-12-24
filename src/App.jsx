@@ -17,6 +17,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Login from './pages/Login';
 import UsersTable from './pages/Users/UsersTable';
+import ProfilePage from './ProfilePage';
 
 function App() {
 
@@ -62,6 +63,14 @@ function App() {
           element={
             <ProtectedRoute>
               <UsersTable />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

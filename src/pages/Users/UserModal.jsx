@@ -1,5 +1,31 @@
+import { useState } from "react";
+import AddUserModal from "./AddUserModal";
+import SuccessModal from "../../SuccessModal";
+
 const UserModal = ({ open, onClose, form, setForm, onSubmit }) => {
       if (!open) return null;
+      const [addUserOpen, setAddUserOpen] = useState(false);
+      const [successOpen, setSuccessOpen] = useState(false);
+      const [errorOpen, setErrorOpen] = useState(false);
+      const [errors, setErrors] = useState({});
+      const handleSave = () => {
+            let newErrors = {};
+
+            if (!form.name || !form.name.trim()) {
+                  newErrors.name = "This field is required";
+            }
+
+            if (Object.keys(newErrors).length > 0) {
+                  setErrors(newErrors);
+                  return;
+            }
+
+            // ✅ clear errors
+            setErrors({});
+
+            // ✅ continue submit logic
+            onSubmit();
+      };
 
       return (
             <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
@@ -23,18 +49,33 @@ const UserModal = ({ open, onClose, form, setForm, onSubmit }) => {
                         <div className="p-6 max-h-[70vh] overflow-y-auto grid grid-cols-2 gap-4">
 
                               <div>
-                                    <label className="block text-sm mb-1">Name</label>
+                                    <div className="flex items-center justify-between mb-1">
+                                          <label className="block text-sm">
+                                                Name
+                                          </label>
+
+                                          <button
+                                                type="button"
+                                                onClick={() => setAddUserOpen(true)}
+                                                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                                          >
+                                                + Add User
+                                          </button>
+                                    </div>
+
                                     <input
                                           value={form.name || ""}
                                           onChange={(e) =>
                                                 setForm({ ...form, name: e.target.value })
                                           }
                                           className="w-full px-3 py-2 rounded border
-              bg-white dark:bg-slate-700
-              border-gray-300 dark:border-slate-600
-              text-gray-800 dark:text-slate-200"
+      bg-white dark:bg-slate-700
+      border-gray-300 dark:border-slate-600
+      text-gray-800 dark:text-slate-200"
                                     />
                               </div>
+
+
 
                               <div>
                                     <label className="block text-sm mb-1">Mobile</label>
@@ -90,13 +131,35 @@ const UserModal = ({ open, onClose, form, setForm, onSubmit }) => {
                                     Cancel
                               </button>
                               <button
-                                    onClick={onSubmit}
+                                    onClick={handleSave}
                                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                               >
                                     Save
                               </button>
                         </div>
                   </div>
+                  <AddUserModal
+                        open={addUserOpen}
+                        onClose={() => setAddUserOpen(false)}
+                        onSuccess={() => {
+                              // ✅ ONLY close AddUserModal
+                              setAddUserOpen(true);
+                              // ✅ OPEN success modal
+                              setSuccessOpen(true);
+                        }}
+                  />
+
+                  {/* SUCCESS MODAL */}
+                  <SuccessModal
+                        open={successOpen}
+                        onClose={() => {
+                              // ✅ Close success modal
+                              setSuccessOpen(false);
+                              // ✅ Ensure add user modal is closed
+                              setAddUserOpen(false);
+                              // ❌ DO NOT close UserModal
+                        }}
+                  />
             </div>
       );
 };
