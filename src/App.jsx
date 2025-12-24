@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Login from './pages/Login';
+import UsersTable from './pages/Users/UsersTable';
 
 function App() {
 
@@ -44,6 +45,23 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/about-us"
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <UsersTable />
             </ProtectedRoute>
           }
         />
